@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+require 'pry'
+
 action :create do
   node_ip = new_resource.node_ip
   port = new_resource.port
@@ -65,7 +67,9 @@ action :create do
     # It appears that the Ruby driver does all the work for us here:
     # 1. If the user doesn't exist -> create it
     # 2. If the user exists -> update password and roles accordingly
+    binding.pry
     db.add_user(username, password, false, "roles" => roles)
+    binding.pry
   rescue ::Mongo::ConnectionFailure => ex
     # Expected error on first run of script
     unless ex.message.include? 'not master or secondary; cannot currently read from this replSet member'
